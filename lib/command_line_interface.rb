@@ -7,6 +7,10 @@ end
 def get_character_from_user
   puts "Put in a character name to see a list of the movies they appear in"
   character = gets.chomp().downcase
-  return character
+  if character == "exit"
+    abort "May the force be with you!"
+  else
+    return character
+  end
   # use gets to capture the user's input. This method should return that input, downcased.
 end

@@ -1,6 +1,7 @@
 require 'rest-client'
 require 'json'
 require 'pry'
+require_relative 'command_line_interface.rb'
 
 def get_character_movies_from_api(character_name)
   #make the web request
@@ -10,13 +11,19 @@ def get_character_movies_from_api(character_name)
   # iterate over the response hash to find the collection of `films` for the given
   #   `character`
   character_hash = response_hash["results"].find {|character| character["name"].downcase == character_name}
+  if character_hash.nil?
+    puts "Misspelled something, you did. Try again, you may"
+    character_name = get_character_from_user
+    get_character_movies_from_api(character_name)
+  else
+    api_urls = character_hash["films"]
+    api_urls.map do |url|
+      get_response_hash(url)
+    end
+  end
+    
   # collect those film API urls, make a web request to each URL to get the info
   #  for that film
-  api_urls = character_hash["films"]
-
-  api_urls.map do |url|
-    get_response_hash(url)
-  end
   # return value of this method should be collection of info about each film.
   #  i.e. an array of hashes in which each hash reps a given film
   # this collection will be the argument given to `print_movies`
