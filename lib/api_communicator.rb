@@ -3,10 +3,10 @@ require 'json'
 require 'pry'
 require_relative 'command_line_interface.rb'
 
+
 def get_character_movies_from_api(character_name)
   #make the web request
   response_hash = get_response_hash("http://swapi.dev/api/people")
-
 
   # iterate over the response hash to find the collection of `films` for the given
   #   `character`
@@ -49,6 +49,12 @@ end
 def show_character_movies(character)
   films = get_character_movies_from_api(character)
   print_movies(films)
+  run_search
+end
+
+def run_search
+  character = get_character_from_user
+  show_character_movies(character)
 end
 
 ## BONUS
